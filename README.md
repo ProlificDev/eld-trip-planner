@@ -27,6 +27,14 @@ A Full-Stack ELD (Electronic Logging Device) Trip Planner web application that h
 - ✅ Automatic fuel stops every 1,000 miles (30 min each)
 - ✅ 1 hour for pickup + 1 hour for dropoff
 
+## 🌐 Live Demo
+
+**Try it now:** https://eldtrip-plannner.netlify.app
+
+- **Frontend:** https://eldtrip-plannner.netlify.app
+- **Backend API:** https://eld-trip-planner-4t30.onrender.com
+- **GitHub Repository:** https://github.com/cyperpro20/eld-trip-planner
+
 ## 🚀 Quick Start
 
 ### Option 1: Automated Setup (Recommended)
