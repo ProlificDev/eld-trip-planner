@@ -1,0 +1,65 @@
+═══════════════════════════════════════════════════════════════
+   NETLIFY ENVIRONMENT VARIABLES - COPY & PASTE
+═══════════════════════════════════════════════════════════════
+
+📋 NETLIFY ENVIRONMENT VARIABLE
+Copy this when deploying to Netlify:
+
+───────────────────────────────────────────────────────────────
+Variable 1:
+───────────────────────────────────────────────────────────────
+Key:
+VITE_API_URL
+
+Value:
+https://eld-trip-planner-backend-xxxx.onrender.com
+
+(Replace xxxx with your actual Render backend URL)
+
+═══════════════════════════════════════════════════════════════
+
+🔧 HOW TO ADD IN NETLIFY:
+
+During Initial Deployment:
+1. When configuring build settings
+2. Click "Show advanced"
+3. Click "New variable"
+4. Copy Key: VITE_API_URL
+5. Copy Value: (your Render backend URL)
+6. Click "Deploy site"
+
+After Deployment (if you forgot):
+1. Go to Site settings
+2. Click "Environment variables" in sidebar
+3. Click "Add a variable"
+4. Key: VITE_API_URL
+5. Value: (your Render backend URL)
+6. Click "Create variable"
+7. Go to Deploys → Trigger deploy → Deploy site
+
+═══════════════════════════════════════════════════════════════
+
+✅ QUICK CHECKLIST:
+
+□ VITE_API_URL = https://your-backend.onrender.com
+
+═══════════════════════════════════════════════════════════════
+
+⚠️ IMPORTANT NOTES:
+
+1. Make sure to include https:// in the URL
+2. Do NOT include a trailing slash
+3. Use your ACTUAL Render URL (not the example)
+4. The backend must be deployed FIRST before you deploy frontend
+
+═══════════════════════════════════════════════════════════════
+
+📝 EXAMPLE:
+
+If your Render backend URL is:
+https://eld-trip-planner-backend-abc123.onrender.com
+
+Then your Netlify variable should be:
+VITE_API_URL = https://eld-trip-planner-backend-abc123.onrender.com
+
+═══════════════════════════════════════════════════════════════

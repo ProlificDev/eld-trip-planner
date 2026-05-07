@@ -3,153 +3,166 @@ import { useNavigate } from 'react-router-dom'
 import RouteMap from './RouteMap'
 import ELDLogCanvas from './ELDLogCanvas'
 
+const cardStyle = {
+  background: 'rgba(255,255,255,0.03)',
+  border: '1px solid rgba(255,255,255,0.07)',
+  borderRadius: '16px',
+  padding: '24px',
+}
+
+const STATUS_COLORS = {
+  'Driving': { bg: 'rgba(99,102,241,0.15)', text: '#818cf8', dot: '#6366f1' },
+  'On Duty': { bg: 'rgba(16,185,129,0.15)', text: '#34d399', dot: '#10b981' },
+  'Sleeper Berth': { bg: 'rgba(139,92,246,0.15)', text: '#a78bfa', dot: '#8b5cf6' },
+  'Off Duty': { bg: 'rgba(100,116,139,0.15)', text: '#94a3b8', dot: '#64748b' },
+}
+
+function StatCard({ label, value, sub, color }) {
+  return (
+    <div style={{ ...cardStyle, padding: '20px' }}>
+      <p style={{ fontSize: '11px', fontWeight: '600', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 8px' }}>
+        {label}
+      </p>
+      <p style={{ fontSize: '28px', fontWeight: '700', color: color || '#fff', margin: '0 0 2px', letterSpacing: '-0.02em' }}>
+        {value}
+      </p>
+      {sub && <p style={{ fontSize: '12px', color: '#475569', margin: 0 }}>{sub}</p>}
+    </div>
+  )
+}
+
 function ResultsPage() {
   const navigate = useNavigate()
   const [tripPlan, setTripPlan] = useState(null)
   const [selectedDay, setSelectedDay] = useState(1)
 
   useEffect(() => {
-    const storedPlan = sessionStorage.getItem('tripPlan')
-    if (storedPlan) {
-      setTripPlan(JSON.parse(storedPlan))
-    } else {
-      navigate('/')
-    }
+    const stored = sessionStorage.getItem('tripPlan')
+    if (stored) setTripPlan(JSON.parse(stored))
+    else navigate('/')
   }, [navigate])
 
   if (!tripPlan) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ width: '40px', height: '40px', border: '3px solid rgba(99,102,241,0.2)', borderTopColor: '#6366f1',
+          borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     )
   }
 
-  const currentDayData = tripPlan.segments.find(seg => seg.day === selectedDay)
+  const currentDayData = tripPlan.segments.find(s => s.day === selectedDay)
+  const cyclePercent = Math.min((tripPlan.final_cycle_used / 70) * 100, 100)
+  const cycleColor = cyclePercent > 90 ? '#ef4444' : cyclePercent > 70 ? '#f59e0b' : '#6366f1'
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      <div className="mb-6 flex justify-between items-center">
-        <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-          Trip Plan Results
-        </h2>
-        <button
-          onClick={() => navigate('/')}
-          className="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-lg transition-colors"
-        >
+    <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '100px 20px 60px' }}>
+
+      {/* Header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '32px', flexWrap: 'wrap', gap: '12px' }}>
+        <div>
+          <h2 style={{ fontSize: '28px', fontWeight: '700', color: '#fff', margin: '0 0 6px', letterSpacing: '-0.02em' }}>
+            Trip Plan
+          </h2>
+          <p style={{ fontSize: '14px', color: '#475569', margin: 0 }}>
+            {tripPlan.stops[0]?.location?.split(',').slice(0, 2).join(',') || 'Origin'} →{' '}
+            {tripPlan.stops[tripPlan.stops.length - 1]?.location?.split(',').slice(0, 2).join(',') || 'Destination'}
+          </p>
+        </div>
+        <button onClick={() => navigate('/')}
+          style={{ padding: '10px 18px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.08)',
+            background: 'rgba(255,255,255,0.04)', color: '#94a3b8', fontSize: '13px', cursor: 'pointer', fontWeight: '500' }}>
           ← New Trip
         </button>
       </div>
 
-      {/* Trip Summary Card */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6">
-        <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
-          Trip Summary
-        </h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Total Distance</p>
-            <p className="text-2xl font-bold text-gray-900 dark:text-white">
-              {tripPlan.total_miles.toFixed(1)} mi
-            </p>
-          </div>
-          <div>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Total Days</p>
-            <p className="text-2xl font-bold text-gray-900 dark:text-white">
-              {tripPlan.total_days}
-            </p>
-          </div>
-          <div>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Cycle Used</p>
-            <p className="text-2xl font-bold text-gray-900 dark:text-white">
-              {tripPlan.final_cycle_used} hrs
-            </p>
-          </div>
-          <div>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Stops</p>
-            <p className="text-2xl font-bold text-gray-900 dark:text-white">
-              {tripPlan.stops.length}
-            </p>
-          </div>
+      {/* Stats row */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '12px', marginBottom: '24px' }}>
+        <StatCard label="Total Distance" value={`${tripPlan.total_miles.toFixed(0)} mi`} sub="Estimated route" />
+        <StatCard label="Trip Duration" value={`${tripPlan.total_days} days`} sub="Including rest periods" />
+        <StatCard label="Cycle Used" value={`${tripPlan.final_cycle_used.toFixed(1)}h`} sub="of 70-hour limit" color={cycleColor} />
+        <StatCard label="Total Stops" value={tripPlan.stops.length} sub="Fuel, pickup & dropoff" />
+      </div>
+
+      {/* Cycle bar */}
+      <div style={{ ...cardStyle, marginBottom: '24px', padding: '16px 24px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+          <span style={{ fontSize: '12px', color: '#64748b', fontWeight: '500' }}>70-Hour Cycle Usage</span>
+          <span style={{ fontSize: '12px', fontWeight: '600', color: cycleColor }}>{cyclePercent.toFixed(1)}%</span>
+        </div>
+        <div style={{ height: '6px', borderRadius: '3px', background: 'rgba(255,255,255,0.06)' }}>
+          <div style={{ height: '100%', borderRadius: '3px', width: `${Math.min(cyclePercent, 100)}%`,
+            background: `linear-gradient(90deg, #6366f1, ${cycleColor})`, transition: 'width 0.5s ease' }} />
         </div>
       </div>
 
-      {/* Route Map */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6">
-        <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
+      {/* Map */}
+      <div style={{ ...cardStyle, marginBottom: '24px' }}>
+        <p style={{ fontSize: '11px', fontWeight: '600', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 16px' }}>
           Route Map
-        </h3>
-        <RouteMap tripPlan={tripPlan} />
-      </div>
-
-      {/* ELD Log Sheets */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-        <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
-          ELD Daily Log Sheets
-        </h3>
-
-        {/* Day Selector Tabs */}
-        <div className="flex space-x-2 mb-6 overflow-x-auto">
-          {tripPlan.segments.map((segment) => (
-            <button
-              key={segment.day}
-              onClick={() => setSelectedDay(segment.day)}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors whitespace-nowrap ${
-                selectedDay === segment.day
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
-              }`}
-            >
-              Day {segment.day} - {segment.date}
-            </button>
-          ))}
+        </p>
+        <div style={{ height: '400px', borderRadius: '12px', overflow: 'hidden' }}>
+          <RouteMap tripPlan={tripPlan} />
         </div>
-
-        {/* ELD Canvas */}
-        {currentDayData && (
-          <ELDLogCanvas dayData={currentDayData} tripPlan={tripPlan} />
-        )}
       </div>
 
-      {/* Detailed Schedule */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mt-6">
-        <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
-          Detailed Schedule - Day {selectedDay}
-        </h3>
-        {currentDayData && (
-          <div className="space-y-2">
-            {currentDayData.events.map((event, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
-              >
-                <div className="flex items-center space-x-4">
-                  <span className="font-mono text-sm text-gray-600 dark:text-gray-400">
-                    {event.start} - {event.end}
+      {/* ELD Logs */}
+      <div style={{ ...cardStyle, marginBottom: '24px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
+          <p style={{ fontSize: '11px', fontWeight: '600', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em', margin: 0 }}>
+            ELD Daily Log Sheets
+          </p>
+          {/* Day tabs */}
+          <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+            {tripPlan.segments.map(seg => (
+              <button key={seg.day} onClick={() => setSelectedDay(seg.day)}
+                style={{ padding: '6px 14px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontSize: '12px', fontWeight: '500',
+                  background: selectedDay === seg.day ? 'linear-gradient(135deg, #6366f1, #8b5cf6)' : 'rgba(255,255,255,0.05)',
+                  color: selectedDay === seg.day ? '#fff' : '#64748b',
+                  boxShadow: selectedDay === seg.day ? '0 4px 12px rgba(99,102,241,0.3)' : 'none',
+                }}>
+                Day {seg.day}
+              </button>
+            ))}
+          </div>
+        </div>
+        {currentDayData && <ELDLogCanvas dayData={currentDayData} tripPlan={tripPlan} />}
+      </div>
+
+      {/* Schedule */}
+      <div style={cardStyle}>
+        <p style={{ fontSize: '11px', fontWeight: '600', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 16px' }}>
+          Schedule — Day {selectedDay} · {currentDayData?.date}
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          {currentDayData?.events.map((event, i) => {
+            const colors = STATUS_COLORS[event.status] || STATUS_COLORS['Off Duty']
+            return (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                padding: '12px 16px', borderRadius: '10px', background: 'rgba(255,255,255,0.02)',
+                border: '1px solid rgba(255,255,255,0.04)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: colors.dot, flexShrink: 0 }} />
+                  <span style={{ fontFamily: 'monospace', fontSize: '12px', color: '#475569', minWidth: '110px' }}>
+                    {event.start} – {event.end}
                   </span>
-                  <span
-                    className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                      event.status === 'Driving'
-                        ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
-                        : event.status === 'On Duty'
-                        ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                        : event.status === 'Sleeper Berth'
-                        ? 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
-                        : 'bg-gray-100 text-gray-800 dark:bg-gray-600 dark:text-gray-200'
-                    }`}
-                  >
+                  <span style={{ fontSize: '12px', fontWeight: '500', padding: '2px 10px', borderRadius: '100px',
+                    background: colors.bg, color: colors.text }}>
                     {event.status}
                   </span>
-                  <span className="text-gray-900 dark:text-white">{event.label}</span>
+                  <span style={{ fontSize: '13px', color: '#94a3b8' }}>{event.label}</span>
                 </div>
-                <span className="text-sm text-gray-500 dark:text-gray-400">
+                <span style={{ fontSize: '12px', color: '#475569', flexShrink: 0 }}>
                   {event.duration.toFixed(1)}h
                 </span>
               </div>
-            ))}
-          </div>
-        )}
+            )
+          })}
+        </div>
       </div>
+
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   )
 }

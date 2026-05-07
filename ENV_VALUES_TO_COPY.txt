@@ -1,0 +1,86 @@
+═══════════════════════════════════════════════════════════════
+   COPY THESE VALUES ONE BY ONE
+═══════════════════════════════════════════════════════════════
+
+VARIABLE 1 - DEBUG
+───────────────────────────────────────────────────────────────
+KEY (copy this):
+DEBUG
+
+VALUE (copy this):
+False
+
+
+VARIABLE 2 - PYTHON_VERSION
+───────────────────────────────────────────────────────────────
+KEY (copy this):
+PYTHON_VERSION
+
+VALUE (copy this):
+3.11.7
+
+
+VARIABLE 3 - SECRET_KEY
+───────────────────────────────────────────────────────────────
+KEY (copy this):
+SECRET_KEY
+
+VALUE (generate and copy from):
+https://djecrety.ir/
+
+(Click "Generate" on that website, then copy the result)
+
+
+═══════════════════════════════════════════════════════════════
+   ADD THESE AFTER FRONTEND IS DEPLOYED
+═══════════════════════════════════════════════════════════════
+
+VARIABLE 4 - ALLOWED_HOSTS (Add after backend deploys)
+───────────────────────────────────────────────────────────────
+KEY (copy this):
+ALLOWED_HOSTS
+
+VALUE (copy YOUR Render URL without https://):
+eld-trip-planner-backend-xxxx.onrender.com
+
+Example: If your URL is https://eld-trip-planner-backend-abc123.onrender.com
+Then paste: eld-trip-planner-backend-abc123.onrender.com
+
+
+VARIABLE 5 - CORS_ALLOWED_ORIGINS (Add after frontend deploys)
+───────────────────────────────────────────────────────────────
+KEY (copy this):
+CORS_ALLOWED_ORIGINS
+
+VALUE (copy YOUR Netlify URL with https://):
+https://your-app-name.netlify.app
+
+Example: If your Netlify URL is https://eld-trip-planner.netlify.app
+Then paste: https://eld-trip-planner.netlify.app
+
+
+OPTIONAL - OPENROUTE_API_KEY
+───────────────────────────────────────────────────────────────
+KEY (copy this):
+OPENROUTE_API_KEY
+
+VALUE (if you have an API key):
+[Your API key from https://openrouteservice.org/]
+
+(Leave this blank if you don't have one - app works without it)
+
+
+═══════════════════════════════════════════════════════════════
+   CURRENT STATUS
+═══════════════════════════════════════════════════════════════
+
+✅ Add NOW (before clicking "Create Web Service"):
+   - DEBUG
+   - PYTHON_VERSION  
+   - SECRET_KEY
+
+⏳ Add LATER (after deployment):
+   - ALLOWED_HOSTS (after backend deploys)
+   - CORS_ALLOWED_ORIGINS (after frontend deploys)
+
+═══════════════════════════════════════════════════════════════

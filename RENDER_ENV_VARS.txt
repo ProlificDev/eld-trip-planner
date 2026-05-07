@@ -1,0 +1,52 @@
+═══════════════════════════════════════════════════════════════
+   RENDER ENVIRONMENT VARIABLES - COPY & PASTE
+═══════════════════════════════════════════════════════════════
+
+STEP 1: Add these variables NOW (before deployment)
+───────────────────────────────────────────────────────────────
+
+KEY: DEBUG
+VALUE: False
+
+KEY: PYTHON_VERSION
+VALUE: 3.11.7
+
+KEY: SECRET_KEY
+VALUE: [Generate at https://djecrety.ir/ and paste here]
+
+
+STEP 2: Add these AFTER you deploy frontend to Netlify
+───────────────────────────────────────────────────────────────
+
+KEY: ALLOWED_HOSTS
+VALUE: [Your Render URL without https://, e.g., eld-trip-planner-backend-xxxx.onrender.com]
+
+KEY: CORS_ALLOWED_ORIGINS
+VALUE: [Your Netlify URL with https://, e.g., https://eld-trip-planner.netlify.app]
+
+
+OPTIONAL (if you have OpenRouteService API key)
+───────────────────────────────────────────────────────────────
+
+KEY: OPENROUTE_API_KEY
+VALUE: [Your API key from https://openrouteservice.org/]
+
+
+═══════════════════════════════════════════════════════════════
+   INSTRUCTIONS
+═══════════════════════════════════════════════════════════════
+
+1. Click "Add Environment Variable" button on Render
+2. Copy KEY from above
+3. Paste into KEY field
+4. Copy VALUE from above
+5. Paste into VALUE field
+6. Repeat for each variable
+
+For SECRET_KEY:
+- Go to: https://djecrety.ir/
+- Click "Generate"
+- Copy the generated key
+- Paste as VALUE
+
+═══════════════════════════════════════════════════════════════
