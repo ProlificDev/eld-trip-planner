@@ -31,19 +31,18 @@ const icons = {
 function RouteMap({ tripPlan }) {
   if (!tripPlan || !tripPlan.stops || tripPlan.stops.length === 0) {
     return (
-      <div className="h-96 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-lg">
-        <p className="text-gray-500 dark:text-gray-400">No route data available</p>
+      <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,0.02)', borderRadius: '12px' }}>
+        <p style={{ color: '#475569', fontSize: '14px' }}>No route data available</p>
       </div>
     )
   }
 
-  // Calculate center and bounds
   const validStops = tripPlan.stops.filter(stop => stop.lat && stop.lng)
-  
+
   if (validStops.length === 0) {
     return (
-      <div className="h-96 flex items-center justify-center bg-gray-100 dark:bg-gray-700 rounded-lg">
-        <p className="text-gray-500 dark:text-gray-400">No valid coordinates available</p>
+      <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,0.02)', borderRadius: '12px' }}>
+        <p style={{ color: '#475569', fontSize: '14px' }}>No valid coordinates available</p>
       </div>
     )
   }
@@ -57,7 +56,7 @@ function RouteMap({ tripPlan }) {
   const routeCoords = tripPlan.route_coordinates?.map(coord => [coord.lat, coord.lng]) || []
 
   return (
-    <div className="h-96 rounded-lg overflow-hidden shadow-lg">
+    <div style={{ height: '100%', width: '100%', borderRadius: '12px', overflow: 'hidden' }}>
       <MapContainer
         center={center}
         zoom={6}

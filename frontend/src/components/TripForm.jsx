@@ -106,29 +106,29 @@ function TripForm() {
   const cycleColor = cyclePercent > 80 ? '#ef4444' : cyclePercent > 60 ? '#f59e0b' : '#6366f1'
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '100px 20px 40px' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '90px 16px 40px' }}>
 
       {/* Hero text */}
-      <div style={{ textAlign: 'center', marginBottom: '48px', maxWidth: '560px' }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '100px', marginBottom: '20px',
+      <div style={{ textAlign: 'center', marginBottom: '32px', maxWidth: '560px', width: '100%' }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', padding: '4px 12px', borderRadius: '100px', marginBottom: '16px',
           background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.2)' }}>
           <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#6366f1', display: 'inline-block' }}></span>
           <span style={{ fontSize: '12px', color: '#818cf8', fontWeight: '500' }}>FMCSA HOS Compliant</span>
         </div>
-        <h1 style={{ fontSize: 'clamp(32px, 5vw, 52px)', fontWeight: '700', color: '#fff', lineHeight: '1.1', margin: '0 0 16px',
+        <h1 style={{ fontSize: 'clamp(26px, 6vw, 52px)', fontWeight: '700', color: '#fff', lineHeight: '1.15', margin: '0 0 12px',
           letterSpacing: '-0.03em' }}>
           Plan your trip,{' '}
           <span style={{ background: 'linear-gradient(135deg, #6366f1, #8b5cf6, #06b6d4)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
             stay compliant
           </span>
         </h1>
-        <p style={{ fontSize: '16px', color: '#64748b', margin: 0, lineHeight: '1.6' }}>
+        <p style={{ fontSize: '15px', color: '#64748b', margin: 0, lineHeight: '1.6' }}>
           Enter your trip details and get a fully HOS-compliant schedule with ELD log sheets — automatically.
         </p>
       </div>
 
       {/* Form card */}
-      <div style={{ width: '100%', maxWidth: '560px', borderRadius: '20px', padding: '32px',
+      <div style={{ width: '100%', maxWidth: '560px', borderRadius: '20px', padding: 'clamp(20px, 5vw, 32px)',
         background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)',
         boxShadow: '0 25px 50px rgba(0,0,0,0.5)' }}>
 
@@ -189,7 +189,7 @@ function TripForm() {
             <p style={{ fontSize: '11px', fontWeight: '600', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 14px' }}>
               Optional Info
             </p>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '10px' }}>
               {[
                 { label: 'Driver Name', name: 'driver_name', placeholder: 'John Doe' },
                 { label: 'Carrier', name: 'carrier_name', placeholder: 'ABC Trucking' },

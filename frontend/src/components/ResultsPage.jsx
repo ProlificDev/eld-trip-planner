@@ -57,7 +57,7 @@ function ResultsPage() {
   const cycleColor = cyclePercent > 90 ? '#ef4444' : cyclePercent > 70 ? '#f59e0b' : '#6366f1'
 
   return (
-    <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '100px 20px 60px' }}>
+    <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '80px 16px 60px' }}>
 
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '32px', flexWrap: 'wrap', gap: '12px' }}>
@@ -102,22 +102,23 @@ function ResultsPage() {
         <p style={{ fontSize: '11px', fontWeight: '600', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em', margin: '0 0 16px' }}>
           Route Map
         </p>
-        <div style={{ height: '400px', borderRadius: '12px', overflow: 'hidden' }}>
+        <div style={{ height: 'clamp(260px, 45vw, 400px)', borderRadius: '12px', overflow: 'hidden' }}>
           <RouteMap tripPlan={tripPlan} />
         </div>
       </div>
 
       {/* ELD Logs */}
-      <div style={{ ...cardStyle, marginBottom: '24px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
+      <div style={{ ...cardStyle, marginBottom: '24px', padding: 'clamp(16px, 4vw, 24px)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '10px' }}>
           <p style={{ fontSize: '11px', fontWeight: '600', color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em', margin: 0 }}>
             ELD Daily Log Sheets
           </p>
-          {/* Day tabs */}
-          <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+          {/* Day tabs — scrollable on mobile */}
+          <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', paddingBottom: '2px', maxWidth: '100%' }}>
             {tripPlan.segments.map(seg => (
               <button key={seg.day} onClick={() => setSelectedDay(seg.day)}
-                style={{ padding: '6px 14px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontSize: '12px', fontWeight: '500',
+                style={{ padding: '6px 14px', borderRadius: '8px', border: 'none', cursor: 'pointer',
+                  fontSize: '12px', fontWeight: '500', flexShrink: 0,
                   background: selectedDay === seg.day ? 'linear-gradient(135deg, #6366f1, #8b5cf6)' : 'rgba(255,255,255,0.05)',
                   color: selectedDay === seg.day ? '#fff' : '#64748b',
                   boxShadow: selectedDay === seg.day ? '0 4px 12px rgba(99,102,241,0.3)' : 'none',
@@ -139,23 +140,28 @@ function ResultsPage() {
           {currentDayData?.events.map((event, i) => {
             const colors = STATUS_COLORS[event.status] || STATUS_COLORS['Off Duty']
             return (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                padding: '12px 16px', borderRadius: '10px', background: 'rgba(255,255,255,0.02)',
-                border: '1px solid rgba(255,255,255,0.04)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: colors.dot, flexShrink: 0 }} />
-                  <span style={{ fontFamily: 'monospace', fontSize: '12px', color: '#475569', minWidth: '110px' }}>
+              <div key={i} style={{ padding: '12px 14px', borderRadius: '10px',
+                background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.04)' }}>
+                {/* Top row: dot + status badge + duration */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '4px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: colors.dot, flexShrink: 0 }} />
+                    <span style={{ fontSize: '12px', fontWeight: '500', padding: '2px 10px', borderRadius: '100px',
+                      background: colors.bg, color: colors.text }}>
+                      {event.status}
+                    </span>
+                  </div>
+                  <span style={{ fontSize: '12px', color: '#475569' }}>{event.duration.toFixed(1)}h</span>
+                </div>
+                {/* Bottom row: time + label */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', paddingLeft: '15px' }}>
+                  <span style={{ fontFamily: 'monospace', fontSize: '11px', color: '#475569', flexShrink: 0 }}>
                     {event.start} – {event.end}
                   </span>
-                  <span style={{ fontSize: '12px', fontWeight: '500', padding: '2px 10px', borderRadius: '100px',
-                    background: colors.bg, color: colors.text }}>
-                    {event.status}
+                  <span style={{ fontSize: '12px', color: '#94a3b8', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {event.label}
                   </span>
-                  <span style={{ fontSize: '13px', color: '#94a3b8' }}>{event.label}</span>
                 </div>
-                <span style={{ fontSize: '12px', color: '#475569', flexShrink: 0 }}>
-                  {event.duration.toFixed(1)}h
-                </span>
               </div>
             )
           })}
